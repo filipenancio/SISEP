@@ -40,8 +40,15 @@ const TransmissionLineResult: React.FC<{
   const midX = (x1 + x2) / 2;
   const midY = (y1 + y2) / 2;
 
-  // Determinar cor baseado no carregamento da linha (loading_percent)
-  const loading = lineResult.loading_percent;
+  // Carregamento (%): usa maior |P| e capacidade convertida para MVA
+  const potencyNumerator = Math.max(Math.abs(lineResult.p_from_mw), Math.abs(lineResult.p_to_mw));
+  const denom = (branch.rateA || branch.baseMVA);
+  const multiply = (branch.rateA == branch.baseMVA ? 1 : 100);
+  const loading = (potencyNumerator / denom) * multiply;
+   
+  //console.log(`branch.rateA: ${branch.rateA}, baseMVA: ${branch.baseMVA}, multiply: ${multiply}`);
+  //console.log(`Branch L${branch.fbus}-${branch.tbus} loading: ${loading.toFixed(2)}%`);
+  
   let lineColor: string;
   let strokeColor: string;
   
@@ -49,15 +56,15 @@ const TransmissionLineResult: React.FC<{
     // Verde
     lineColor = '#90EE90';
     strokeColor = '#228B22';
-  } else if (loading <= 75) {
+  } else if (loading <= 70) {
     // Amarelo
     lineColor = '#FFFF99';
     strokeColor = '#FFD700';
-  } else if (loading < 100) {
+  } else if (loading <= 90) {
     // Laranja
     lineColor = '#FFB347';
     strokeColor = '#FF8C00';
-  } else if (loading <= 110) {
+  } else if (loading <= 100.01) {
     // Vermelho
     lineColor = '#FF6B6B';
     strokeColor = '#DC143C';

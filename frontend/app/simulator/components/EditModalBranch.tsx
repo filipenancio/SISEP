@@ -305,17 +305,6 @@ export const EditModalBranch: React.FC<EditModalBranchProps> = ({
                 %
               </span>
             </div>
-            <div>
-              <label style={{ 
-                minWidth: '130px', 
-                marginRight: '10px', 
-                fontWeight: 'bold',
-                fontSize: '12px',
-                color: '#000'
-              }}>
-              Obs.: O % de uso leva em consideração a potência aparente (S= &radic;(P<sup>2</sup> + Q<sup>2</sup>)) com base na capacidade da linha.
-              </label>
-            </div>
           </>
         ) : (
           // Visualização de Edição

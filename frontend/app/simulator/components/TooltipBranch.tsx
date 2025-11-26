@@ -28,7 +28,16 @@ export const TooltipBranch: React.FC<TooltipBranchProps> = ({
           <div>Q (para): {lineResult.q_to_mvar.toFixed(2)} MVAr</div>
           <div>Perda P: {lineResult.p_loss_mw.toFixed(2)} MW</div>
           <div>Perda Q: {lineResult.q_loss_mvar.toFixed(2)} MVAr</div>
-          <div>% de uso: {lineResult.loading_percent.toFixed(2)}%</div>
+          {(() => {
+            const numerator = Math.max(
+              Math.abs(lineResult.p_from_mw),
+              Math.abs(lineResult.p_to_mw)
+            );
+            const denom = branch.rateA || 1; // evita divisão por zero
+            const multiply = (branch.rateA == branch.baseMVA ? 1 : 100);
+            const loadingPct = (numerator / denom) * multiply;
+            return <div>% de uso: {loadingPct.toFixed(2)}%</div>;
+          })()}
         </>
       ) : (
         <>

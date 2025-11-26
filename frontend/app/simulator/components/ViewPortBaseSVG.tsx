@@ -317,28 +317,28 @@ export const DefaultLegend: React.FC<{ includeResultLines?: boolean }> = ({ incl
             <rect x="2" y="7" width="19" height="5" fill="#FFFF99" stroke="#FFD700" strokeWidth="1" rx="2" />
             <polygon points="16,9.5 14,8 14,11" fill="#000" stroke="#000" strokeWidth="0.5" />
           </svg>
-          <span style={{ color: '#333', fontSize: '10px' }}>51-75% - Moderado</span>
+          <span style={{ color: '#333', fontSize: '10px' }}>51-70% - Moderado</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
           <svg width="22" height="18" style={{ marginRight: '10px' }}>
             <rect x="2" y="7" width="19" height="5" fill="#FFB347" stroke="#FF8C00" strokeWidth="1" rx="2" />
             <polygon points="16,9.5 14,8 14,11" fill="#000" stroke="#000" strokeWidth="0.5" />
           </svg>
-          <span style={{ color: '#333', fontSize: '10px' }}>76-99% - Elevado</span>
+          <span style={{ color: '#333', fontSize: '10px' }}>71-90% - Elevado</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
           <svg width="22" height="18" style={{ marginRight: '10px' }}>
             <rect x="2" y="7" width="19" height="5" fill="#FF6B6B" stroke="#DC143C" strokeWidth="1" rx="2" />
             <polygon points="16,9.5 14,8 14,11" fill="#000" stroke="#000" strokeWidth="0.5" />
           </svg>
-          <span style={{ color: '#333', fontSize: '10px' }}>100-110% - Crítico</span>
+          <span style={{ color: '#333', fontSize: '10px' }}>91-100% - Crítico</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
           <svg width="22" height="18" style={{ marginRight: '10px' }}>
             <rect x="2" y="7" width="19" height="5" fill="#9370DB" stroke="#4B0082" strokeWidth="1" rx="2" />
             <polygon points="16,9.5 14,8 14,11" fill="#000" stroke="#000" strokeWidth="0.5" />
           </svg>
-          <span style={{ color: '#333', fontSize: '10px' }}>&gt; 110% - Sobrecarga</span>
+          <span style={{ color: '#333', fontSize: '10px' }}>&gt; 100% - Sobrecarga</span>
         </div>
       </>
     ) : (

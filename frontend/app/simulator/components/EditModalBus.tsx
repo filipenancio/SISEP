@@ -400,7 +400,7 @@ export const EditModalBus: React.FC<EditModalBusProps> = ({
         {renderField('V mínima', 'Vmin', 'pu', 0.8, 1.2, 0.01)}
         
         {/* Campo Bs - Shunt da Barra */}
-        {renderField('Shunt da Barra (Bs)', 'Bs', 'pu', undefined, undefined, 0.001)}
+        {renderField('Shunt da Barra (Bs)', 'Bs', 'MVAr', undefined, undefined, 0.001)}
         
         {/* Campo do gerador - movido para o final */}
         <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
