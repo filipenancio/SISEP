@@ -34,7 +34,7 @@ export const TooltipBranch: React.FC<TooltipBranchProps> = ({
               Math.abs(lineResult.p_to_mw)
             );
             const denom = branch.rateA || 1; // evita divisão por zero
-            const multiply = (branch.rateA == branch.baseMVA ? 1 : 100);
+            const multiply = (branch.rateA == 0 || branch.rateA == branch.baseMVA ? 1 : 100);
             const loadingPct = (numerator / denom) * multiply;
             return <div>% de uso: {loadingPct.toFixed(2)}%</div>;
           })()}
