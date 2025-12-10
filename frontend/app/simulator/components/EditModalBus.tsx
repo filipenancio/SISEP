@@ -333,68 +333,79 @@ export const EditModalBus: React.FC<EditModalBusProps> = ({
         {renderField('Potência Ativa', 'Pd', 'MW', 0)}
         {renderField('Potência Reativa', 'Qd', 'MVAr', 0)}
         
-        {/* Campos de tensão e ângulo - somente leitura */}
-        <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-          <label style={{ 
-            minWidth: '130px', 
-            marginRight: '10px', 
-            fontWeight: 'bold',
-            fontSize: '12px',
-            color: '#000'
-          }}>
-            Tensão:
-          </label>
-          <span style={{
-            width: '200px',
-            padding: '6px 8px',
-            backgroundColor: '#f5f5f5',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            fontSize: '12px',
-            color: '#666'
-          }}>
-            {data.Vm !== undefined ? data.Vm.toFixed(3) : '1.000'}
-          </span>
-          <span style={{ 
-            marginLeft: '8px', 
-            fontSize: '12px', 
-            color: '#666',
-            minWidth: '50px'
-          }}>
-            pu
-          </span>
-        </div>
+        {/* Campos de tensão e ângulo - editáveis para barras PQ sem gerador */}
+        {data.type === 1 && !data.hasGenerator ? (
+          // Barra PQ sem gerador: tensão e ângulo editáveis (ponto de partida)
+          <>
+            {renderField('Tensão (inicial)', 'Vm', 'pu', 0.8, 1.2, 0.001)}
+            {renderField('Ângulo (inicial)', 'Va', '°', -180, 180, 0.01)}
+          </>
+        ) : (
+          // Outras barras: tensão e ângulo somente leitura
+          <>
+            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+              <label style={{ 
+                minWidth: '130px', 
+                marginRight: '10px', 
+                fontWeight: 'bold',
+                fontSize: '12px',
+                color: '#000'
+              }}>
+                Tensão:
+              </label>
+              <span style={{
+                width: '200px',
+                padding: '6px 8px',
+                backgroundColor: '#f5f5f5',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                fontSize: '12px',
+                color: '#666'
+              }}>
+                {data.Vm !== undefined ? data.Vm.toFixed(3) : '1.000'}
+              </span>
+              <span style={{ 
+                marginLeft: '8px', 
+                fontSize: '12px', 
+                color: '#666',
+                minWidth: '50px'
+              }}>
+                pu
+              </span>
+            </div>
 
-        <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-          <label style={{ 
-            minWidth: '130px', 
-            marginRight: '10px', 
-            fontWeight: 'bold',
-            fontSize: '12px',
-            color: '#000'
-          }}>
-            Ângulo:
-          </label>
-          <span style={{
-            width: '200px',
-            padding: '6px 8px',
-            backgroundColor: '#f5f5f5',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            fontSize: '12px',
-            color: '#666'
-          }}>
-            {data.Va !== undefined ? data.Va.toFixed(2) : '0.00'}
-          </span>
-          <span style={{ 
-            marginLeft: '8px', 
-            fontSize: '12px', 
-            color: '#666',
-            minWidth: '50px'
-          }}>
-            °
-          </span>
-        </div>
+            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+              <label style={{ 
+                minWidth: '130px', 
+                marginRight: '10px', 
+                fontWeight: 'bold',
+                fontSize: '12px',
+                color: '#000'
+              }}>
+                Ângulo:
+              </label>
+              <span style={{
+                width: '200px',
+                padding: '6px 8px',
+                backgroundColor: '#f5f5f5',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                fontSize: '12px',
+                color: '#666'
+              }}>
+                {data.Va !== undefined ? data.Va.toFixed(2) : '0.00'}
+              </span>
+              <span style={{ 
+                marginLeft: '8px', 
+                fontSize: '12px', 
+                color: '#666',
+                minWidth: '50px'
+              }}>
+                °
+              </span>
+            </div>
+          </>
+        )}
 
         {renderField('V máxima', 'Vmax', 'pu', 0.8, 1.2, 0.01)}
         {renderField('V mínima', 'Vmin', 'pu', 0.8, 1.2, 0.01)}
