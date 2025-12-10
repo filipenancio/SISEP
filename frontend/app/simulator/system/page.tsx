@@ -10,6 +10,8 @@ import { BaseBusSystemDiagram } from "../components/PowerSystemElements";
 import { sistema3Barras } from "../data/case3p";
 import { sistema4Barras } from "../data/case4p";
 import { sistema5Barras } from "../data/case5p";
+import { sistema6Barras } from "../data/case6p";
+import { sistema9Barras } from "../data/case9p";
 import { sistema14Barras } from "../data/case14p";
 import { MPC, MPCResult } from "../utils/SimulateUtils";
 import { mpcToMatpower } from "../utils/MPCToMatpower";
@@ -41,6 +43,10 @@ export default function SystemModel() {
         return sistema4Barras;
       case 'case5p.m':
         return sistema5Barras;
+      case 'case6p.m':
+        return sistema6Barras;
+      case 'case9p.m':
+        return sistema9Barras;
       case 'case14p.m':
         return sistema14Barras;
       default:
@@ -106,6 +112,10 @@ export default function SystemModel() {
         return 'Sistema de 4 Barras';
       case 'case5p.m':
         return 'Sistema de 5 Barras';
+      case 'case6p.m':
+        return 'Sistema de 6 Barras';
+      case 'case9p.m':
+        return 'Sistema de 9 Barras';
       case 'case14p.m':
         return 'Sistema de 14 Barras';
       default:
@@ -404,7 +414,7 @@ export default function SystemModel() {
             )}
           </h2>
           <div className={styles.systemDiagram} ref={diagramRef}>
-            {(systemName === 'case3p.m' || systemName === 'case4p.m' || systemName === 'case5p.m' || systemName === 'case14p.m') ? (
+            {(systemName === 'case3p.m' || systemName === 'case4p.m' || systemName === 'case5p.m' || systemName === 'case6p.m' || systemName === 'case9p.m' || systemName === 'case14p.m') ? (
               <BaseBusSystemDiagram
                 externalControls={true}
                 onSimulationStatusChange={setSimulationStatus}

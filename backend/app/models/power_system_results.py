@@ -44,6 +44,7 @@ class ExtGridResult(BaseModel):
     bus_id: int
     p_mw: float
     q_mvar: float
+    vm_pu: float
 
 class PowerSystemResult(BaseModel):
     buses: List[BusResult]

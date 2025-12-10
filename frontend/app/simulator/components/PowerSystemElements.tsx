@@ -8,6 +8,8 @@ import { ViewPortBaseSVG, DefaultLegend, BaseValuesDisplay, ResultTotals } from 
 import { Diagram3Bus, busPositions3 } from './Diagram3Bus';
 import Diagram4Bus, { busPositions4 } from './Diagram4Bus';
 import Diagram5Bus, { busPositions5 } from './Diagram5Bus';
+import Diagram6Bus, { busPositions6 } from './Diagram6Bus';
+import Diagram9Bus, { busPositions9 } from './Diagram9Bus';
 import Diagram14Bus, { busPositions14 } from './Diagram14Bus';
 import { MPC, MPCResult, simulateSystem, checkLinesWithoutCapacity, applyBaseMVAToLines } from '../utils/SimulateUtils';
 import { TooltipBus } from './TooltipBus';
@@ -321,6 +323,8 @@ export const BaseBusSystemDiagram: React.FC<BaseBusSystemDiagramProps> = ({
     3: busPositions3,
     4: busPositions4,
     5: busPositions5,
+    6: busPositions6,
+    9: busPositions9,
     14: busPositions14
   };
 
@@ -1108,6 +1112,8 @@ export const BaseBusSystemDiagram: React.FC<BaseBusSystemDiagramProps> = ({
           const numBuses = sistemaState.bus.length;
           const DiagramComponent = numBuses === 4 ? Diagram4Bus : 
                                    numBuses === 5 ? Diagram5Bus :
+                                   numBuses === 6 ? Diagram6Bus :
+                                   numBuses === 9 ? Diagram9Bus :
                                    numBuses === 14 ? Diagram14Bus :
                                    Diagram3Bus;
           

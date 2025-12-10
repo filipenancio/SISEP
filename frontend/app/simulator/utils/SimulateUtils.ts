@@ -35,6 +35,7 @@ export interface MPCResult {
     bus_id: number;
     p_mw: number;
     q_mvar: number;
+    vm_pu: number;
   }>;
   genCapacityP: number;
   genCapacityQmin: number;
@@ -263,7 +264,8 @@ export async function simulateSystem(mpc: MPC, algorithm: string = 'nr'): Promis
     ext_grid: rawResult.ext_grid ? [{
       bus_id: rawResult.ext_grid.bus_id + 1,
       p_mw: rawResult.ext_grid.p_mw,
-      q_mvar: rawResult.ext_grid.q_mvar
+      q_mvar: rawResult.ext_grid.q_mvar,
+      vm_pu: rawResult.ext_grid.vm_pu
     }] : [],
     genCapacityP: rawResult.genCapacityP || 0,
     genCapacityQmin: rawResult.genCapacityQmin || 0,

@@ -384,10 +384,15 @@ class MatpowerService:
         if hasattr(net, 'ext_grid') and len(net.ext_grid) > 0:
             self._debug_print(f"Colunas disponíveis em res_ext_grid: {list(net.res_ext_grid.columns)}")
             try:
+                bus_id = int(net.ext_grid.bus.iloc[0])
+                # Obter tensão da barra slack após simulação
+                vm_pu = float(net.res_bus.vm_pu.iloc[bus_id]) if bus_id < len(net.res_bus) else 1.0
+                
                 ext_grid = ExtGridResult(
-                    bus_id=int(net.ext_grid.bus.iloc[0]),
+                    bus_id=bus_id,
                     p_mw=float(net.res_ext_grid.p_mw.iloc[0]) if 'p_mw' in net.res_ext_grid.columns else 0.0,
-                    q_mvar=float(net.res_ext_grid.q_mvar.iloc[0]) if 'q_mvar' in net.res_ext_grid.columns else 0.0
+                    q_mvar=float(net.res_ext_grid.q_mvar.iloc[0]) if 'q_mvar' in net.res_ext_grid.columns else 0.0,
+                    vm_pu=vm_pu
                 )
             except Exception as e:
                 self._debug_print(f"Erro ao converter ext_grid: {str(e)}")

@@ -12,6 +12,7 @@ interface ExtGridResultData {
   bus_id: number;
   p_mw: number;
   q_mvar: number;
+  vm_pu: number;
 }
 
 interface TooltipGeneratorProps {
@@ -46,7 +47,7 @@ export const TooltipGenerator: React.FC<TooltipGeneratorProps> = ({
             <>
               <div>P: {extGridResult.p_mw.toFixed(2)} MW</div>
               <div>Q: {extGridResult.q_mvar.toFixed(2)} MVAr</div>
-              <div>V: 1.000 pu</div>
+              <div>V: {extGridResult.vm_pu.toFixed(3)} pu</div>
             </>
           ) : (
             <>
