@@ -41,6 +41,9 @@ export interface MPCResult {
   genCapacityQmax: number;
   loadSystemP: number;
   loadSystemQ: number;
+  iterations?: number;
+  execution_time_s?: number;
+  algorithm?: string;
 }
 
 /**
@@ -179,7 +182,7 @@ export function applyBaseMVAToLines(mpc: MPC): MPC {
 /**
  * Faz a simulação chamando o backend
  */
-export async function simulateSystem(mpc: MPC): Promise<MPCResult> {
+export async function simulateSystem(mpc: MPC, algorithm: string = 'nr'): Promise<MPCResult> {
   const matpowerString = mpcToMatpower(mpc);
   
   // Criar um arquivo blob com o conteúdo MATPOWER
@@ -187,7 +190,7 @@ export async function simulateSystem(mpc: MPC): Promise<MPCResult> {
   const formData = new FormData();
   formData.append('file', blob, 'case_custom.m');
   
-  const response = await fetch('http://localhost:8000/sisep/simulate/matpower/upload', {
+  const response = await fetch(`http://localhost:8000/sisep/simulate/matpower/upload?algorithm=${algorithm}`, {
     method: 'POST',
     body: formData
   });
@@ -266,7 +269,10 @@ export async function simulateSystem(mpc: MPC): Promise<MPCResult> {
     genCapacityQmin: rawResult.genCapacityQmin || 0,
     genCapacityQmax: rawResult.genCapacityQmax || 0,
     loadSystemP: rawResult.loadSystemP || 0,
-    loadSystemQ: rawResult.loadSystemQ || 0
+    loadSystemQ: rawResult.loadSystemQ || 0,
+    iterations: rawResult.iterations || 0,
+    execution_time_s: rawResult.execution_time_s || 0.0,
+    algorithm: rawResult.algorithm || 'nr'
   };
   
   return adjustedResult;

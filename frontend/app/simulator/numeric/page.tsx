@@ -16,7 +16,8 @@ const InputView = ({
   handleBackToMain, 
   handleSubmit, 
   isLoading,
-  selectedAlgorithm
+  selectedAlgorithm,
+  setSelectedAlgorithm
 }: {
   inputValue: string;
   setInputValue: (value: string) => void;
@@ -24,6 +25,7 @@ const InputView = ({
   handleSubmit: () => void;
   isLoading: boolean;
   selectedAlgorithm: string;
+  setSelectedAlgorithm: (value: string) => void;
 }) => (
   <div className={styles.contentContainer}>
     <div className={styles.singleSection}>
@@ -62,65 +64,65 @@ end`}
           <span style={{ fontSize: '12px', fontWeight: '600', color: '#495057', marginRight: '8px' }}>
             Algoritmo:
           </span>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'default', opacity: 0.9 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
             <input 
               type="radio" 
               value="nr" 
-              checked={selectedAlgorithm === 'nr'} 
-              disabled 
-              style={{ cursor: 'default', width: '14px', height: '14px' }}
+              checked={selectedAlgorithm === 'nr'}
+              onChange={(e) => setSelectedAlgorithm(e.target.value)}
+              style={{ cursor: 'pointer', width: '14px', height: '14px' }}
             />
             <span style={{ fontSize: '11px', color: '#333', whiteSpace: 'nowrap' }}>Newton-Raphson (nr)</span>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'default', opacity: 0.6 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
             <input 
               type="radio" 
               value="fdxb" 
-              checked={selectedAlgorithm === 'fdxb'} 
-              disabled 
-              style={{ cursor: 'default', width: '14px', height: '14px' }}
+              checked={selectedAlgorithm === 'fdxb'}
+              onChange={(e) => setSelectedAlgorithm(e.target.value)}
+              style={{ cursor: 'pointer', width: '14px', height: '14px' }}
             />
-            <span style={{ fontSize: '11px', color: '#666', whiteSpace: 'nowrap' }}>NR desacoplado (fdxb)</span>
+            <span style={{ fontSize: '11px', color: '#333', whiteSpace: 'nowrap' }}>NR desacoplado (fdxb)</span>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'default', opacity: 0.6 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
             <input 
               type="radio" 
               value="fdbx" 
-              checked={selectedAlgorithm === 'fdbx'} 
-              disabled 
-              style={{ cursor: 'default', width: '14px', height: '14px' }}
+              checked={selectedAlgorithm === 'fdbx'}
+              onChange={(e) => setSelectedAlgorithm(e.target.value)}
+              style={{ cursor: 'pointer', width: '14px', height: '14px' }}
             />
-            <span style={{ fontSize: '11px', color: '#666', whiteSpace: 'nowrap' }}>NR desacoplado (fdbx)</span>
+            <span style={{ fontSize: '11px', color: '#333', whiteSpace: 'nowrap' }}>NR desacoplado (fdbx)</span>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'default', opacity: 0.6 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
             <input 
               type="radio" 
               value="bfsw" 
-              checked={selectedAlgorithm === 'bfsw'} 
-              disabled 
-              style={{ cursor: 'default', width: '14px', height: '14px' }}
+              checked={selectedAlgorithm === 'bfsw'}
+              onChange={(e) => setSelectedAlgorithm(e.target.value)}
+              style={{ cursor: 'pointer', width: '14px', height: '14px' }}
             />
-            <span style={{ fontSize: '11px', color: '#666', whiteSpace: 'nowrap' }}>BF Sweep (bfsw)</span>
+            <span style={{ fontSize: '11px', color: '#333', whiteSpace: 'nowrap' }}>BF Sweep (bfsw)</span>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'default', opacity: 0.6 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
             <input 
               type="radio" 
               value="gs" 
-              checked={selectedAlgorithm === 'gs'} 
-              disabled 
-              style={{ cursor: 'default', width: '14px', height: '14px' }}
+              checked={selectedAlgorithm === 'gs'}
+              onChange={(e) => setSelectedAlgorithm(e.target.value)}
+              style={{ cursor: 'pointer', width: '14px', height: '14px' }}
             />
-            <span style={{ fontSize: '11px', color: '#666', whiteSpace: 'nowrap' }}>Gauss-Seidel (gs)</span>
+            <span style={{ fontSize: '11px', color: '#333', whiteSpace: 'nowrap' }}>Gauss-Seidel (gs)</span>
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'default', opacity: 0.6 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
             <input 
               type="radio" 
               value="dc" 
-              checked={selectedAlgorithm === 'dc'} 
-              disabled 
-              style={{ cursor: 'default', width: '14px', height: '14px' }}
+              checked={selectedAlgorithm === 'dc'}
+              onChange={(e) => setSelectedAlgorithm(e.target.value)}
+              style={{ cursor: 'pointer', width: '14px', height: '14px' }}
             />
-            <span style={{ fontSize: '11px', color: '#666', whiteSpace: 'nowrap' }}>DC Power Flow (dc)</span>
+            <span style={{ fontSize: '11px', color: '#333', whiteSpace: 'nowrap' }}>DC Power Flow (dc)</span>
           </label>
         </div>
         <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
@@ -234,8 +236,8 @@ export default function NumericModel() {
       const file = new File([currentInput], "file.m", { type: "text/plain" });
       formData.append("file", file);
 
-      // Enviar para o backend
-      const response = await fetch("http://localhost:8000/sisep/simulate/matpower/upload", {
+      // Enviar para o backend com o algoritmo selecionado
+      const response = await fetch(`http://localhost:8000/sisep/simulate/matpower/upload?algorithm=${selectedAlgorithm}`, {
         method: "POST",
         body: formData,
       });
@@ -446,6 +448,7 @@ export default function NumericModel() {
             handleSubmit={handleSubmit}
             isLoading={isLoading}
             selectedAlgorithm={selectedAlgorithm}
+            setSelectedAlgorithm={setSelectedAlgorithm}
           />
         ) : (
           <OutputView 

@@ -113,6 +113,27 @@ export default function SystemModel() {
     }
   };
 
+  const getPerfInfo = () => {
+    if (!simulationResult || simulationStatus !== 'result') return '';
+    
+    // Mapear código do algoritmo para nome completo
+    const algorithmNames: { [key: string]: string } = {
+      'nr': 'Newton-Raphson',
+      'fdxb': 'Fast Decoupled XB',
+      'fdbx': 'Fast Decoupled BX',
+      'bfsw': 'Backward/Forward Sweep',
+      'gs': 'Gauss-Seidel',
+      'dc': 'DC Power Flow'
+    };
+    
+    const iterations = simulationResult.iterations || 0;
+    const executionTime = simulationResult.execution_time_s || 0.0;
+    const algorithm = simulationResult.algorithm || 'nr';
+    const algorithmName = algorithmNames[algorithm] || algorithm;
+    
+    return ` (Algoritmo: ${algorithmName}, ${iterations} iterações, ${executionTime.toFixed(4)}s)`;
+  };
+
   const generatePDF = async () => {
     if (!simulationResult || !inputMPC) {
       setExportModal({ 
@@ -270,7 +291,10 @@ export default function SystemModel() {
         genCapacityQmin: simulationResult.genCapacityQmin,
         genCapacityQmax: simulationResult.genCapacityQmax,
         loadSystemP: simulationResult.loadSystemP,
-        loadSystemQ: simulationResult.loadSystemQ
+        loadSystemQ: simulationResult.loadSystemQ,
+        iterations: simulationResult.iterations,
+        execution_time_s: simulationResult.execution_time_s,
+        algorithm: simulationResult.algorithm || 'nr'
       };
 
       // Processar saída com fonte 9
@@ -366,7 +390,19 @@ export default function SystemModel() {
 
       <main className={styles.mainContent}>
         <div className={styles.contentContainer}>
-          <h2 className={styles.systemTitle}>{getSystemTitle()}</h2>
+          <h2 className={styles.systemTitle}>
+            {getSystemTitle()}
+            {simulationStatus === 'result' && (
+              <span style={{ 
+                fontSize: '14px', 
+                fontWeight: 'normal', 
+                color: '#666',
+                marginLeft: '10px'
+              }}>
+                {getPerfInfo()}
+              </span>
+            )}
+          </h2>
           <div className={styles.systemDiagram} ref={diagramRef}>
             {(systemName === 'case3p.m' || systemName === 'case4p.m' || systemName === 'case5p.m' || systemName === 'case14p.m') ? (
               <BaseBusSystemDiagram

@@ -95,7 +95,7 @@ class MatpowerService:
         
         return '\n'.join(modified_lines)
 
-    def simulate_from_filename(self, filename: str) -> PowerSystemResult:
+    def simulate_from_filename(self, filename: str, algorithm: str = 'nr') -> PowerSystemResult:
         """Simula um sistema a partir de um arquivo MATPOWER"""
         import tempfile
         
@@ -129,7 +129,7 @@ class MatpowerService:
             
             # Converter do arquivo temporário corrigido
             net = from_mpc(temp_file)
-            return self._run_simulation(net)
+            return self._run_simulation(net, algorithm)
             
         except Exception as e:
             raise ValueError(f"Erro ao simular a partir do modelo {filename}: {str(e)}")
@@ -141,7 +141,7 @@ class MatpowerService:
                 except:
                     pass
 
-    def simulate_from_string(self, matpower_string: str) -> PowerSystemResult:
+    def simulate_from_string(self, matpower_string: str, algorithm: str = 'nr') -> PowerSystemResult:
         """Simula um sistema a partir de uma string MATPOWER"""
         import tempfile
         import warnings
@@ -162,16 +162,17 @@ class MatpowerService:
                 self._debug_print(f"Criando rede a partir do arquivo: {tmp_path}")
                 net = from_mpc(tmp_path)
                 self._debug_print(f"Rede criada com sucesso. Buses: {len(net.bus)}")
-                return self._run_simulation(net)
+                return self._run_simulation(net, algorithm)
             except Exception as e:
                 self._debug_print(f"Erro ao criar/simular rede: {str(e)}")
                 raise ValueError(f"Erro ao processar o arquivo MATPOWER: {str(e)}")
             finally:
                 os.unlink(tmp_path)
 
-    def _run_simulation(self, net: pp.pandapowerNet) -> PowerSystemResult:
+    def _run_simulation(self, net: pp.pandapowerNet, algorithm: str = 'nr') -> PowerSystemResult:
         """Executa a simulação e converte os resultados"""
         import warnings
+        import time
         
         try:
             # Suprimir warnings específicos do pandas/pandapower
@@ -179,9 +180,15 @@ class MatpowerService:
                 warnings.filterwarnings("ignore", category=FutureWarning, module="pandas")
                 warnings.filterwarnings("ignore", category=FutureWarning, module="pandapower")
                 
-                self._debug_print("Iniciando simulação...")
-                pp.runpp(net)
+                self._debug_print(f"Iniciando simulação com algoritmo: {algorithm}...")
+                start_time = time.time()
+                
+                # Executar com algoritmo especificado
+                pp.runpp(net, algorithm=algorithm, numba=False)
+                
+                execution_time = time.time() - start_time
                 self._debug_print("Simulação concluída com sucesso")
+                self._debug_print(f"Tempo de execução: {execution_time:.4f}s")
                 
                 # Print adicional para debug imediato no console
                 self._debug_print("=== DEBUG NET VARIABLE ===")
@@ -198,9 +205,46 @@ class MatpowerService:
             self._debug_print(f"Erro durante simulação: {str(e)}")
             raise ValueError(f"Erro na simulação do sistema: {str(e)}")
         
-        return self._convert_results(net)
+        # Capturar número de iterações do algoritmo
+        iterations = 0
+        
+        # O pandapower não expõe diretamente as iterações do Newton-Raphson
+        # Vamos tentar diferentes abordagens
+        
+        # 1. Verificar _ppc (estrutura interna do PYPOWER/MATPOWER)
+        if hasattr(net, '_ppc') and net._ppc is not None and isinstance(net._ppc, dict):
+            self._debug_print(f"_ppc disponível com chaves: {list(net._ppc.keys())}")
+            
+            # Tentar pegar de 'et' (elapsed time com iterações em algumas versões)
+            if 'et' in net._ppc:
+                et_value = net._ppc['et']
+                self._debug_print(f"_ppc['et']: {et_value} (tipo: {type(et_value)})")
+                # et geralmente é o tempo, mas em algumas versões tem iterações
+                if isinstance(et_value, (list, tuple)) and len(et_value) > 0:
+                    iterations = int(et_value[0]) if isinstance(et_value[0], (int, float)) else 0
+            
+            # Verificar 'iterations' diretamente
+            if 'iterations' in net._ppc:
+                iterations = int(net._ppc['iterations'])
+                self._debug_print(f"Iterações em _ppc['iterations']: {iterations}")
+            
+            # Verificar estrutura success
+            if 'success' in net._ppc:
+                self._debug_print(f"Convergência: {net._ppc['success']}")
+        
+        # 2. Verificar se há informações de convergência
+        if hasattr(net, 'converged'):
+            self._debug_print(f"net.converged: {net.converged}")
+        
+        # 3. Verificar _options
+        if hasattr(net, '_options') and net._options is not None:
+            self._debug_print(f"_options: {net._options}")
+        
+        self._debug_print(f"Iterações finais: {iterations}, Tempo: {execution_time:.4f}s")
+        
+        return self._convert_results(net, iterations, execution_time, algorithm)
 
-    def _convert_results(self, net: pp.pandapowerNet) -> PowerSystemResult:
+    def _convert_results(self, net: pp.pandapowerNet, iterations: int = 0, execution_time: float = 0.0, algorithm: str = 'nr') -> PowerSystemResult:
         """Converte os resultados do pandapower para nosso formato"""
         from app.models.power_system_results import (
             BusResult, LineResult, LoadResult, 
@@ -402,5 +446,8 @@ class MatpowerService:
             genCapacityQmin=gen_capacity_qmin,
             genCapacityQmax=gen_capacity_qmax,
             loadSystemP=load_system_p,
-            loadSystemQ=load_system_q
+            loadSystemQ=load_system_q,
+            iterations=iterations,
+            execution_time_s=execution_time,
+            algorithm=algorithm
         )

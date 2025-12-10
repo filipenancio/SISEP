@@ -4,6 +4,24 @@ export function formatResults(result: any): string {
   }
 
   let formattedOutput = "";
+
+  // Mapear código do algoritmo para nome completo
+  const algorithmNames: { [key: string]: string } = {
+    'nr': 'Newton-Raphson',
+    'fdxb': 'Fast Decoupled XB',
+    'fdbx': 'Fast Decoupled BX',
+    'bfsw': 'Backward/Forward Sweep',
+    'gs': 'Gauss-Seidel',
+    'dc': 'DC Power Flow'
+  };
+  
+  const iterations = result.iterations || 0;
+  const executionTime = result.execution_time_s || 0.0;
+  const algorithm = result.algorithm || 'nr';
+  const algorithmName = algorithmNames[algorithm] || algorithm;
+  const perfInfo = `(Algoritmo: ${algorithmName}, ${iterations} iterações, ${executionTime.toFixed(4)}s)`;
+
+  formattedOutput +=`${perfInfo}\n`;
   
   // Cabeçalho do sistema
   formattedOutput += "=========================================================================================\n";
@@ -39,7 +57,7 @@ export function formatResults(result: any): string {
   // Tabela de resumo do sistema
   const genCapacityQRange = `${result.genCapacityQmin.toFixed(2)} to ${result.genCapacityQmax.toFixed(2)}`.padStart(24);
   
-  formattedOutput += "  Resumo do sistema\n";
+  formattedOutput += `  Resumo do sistema \n`;
   formattedOutput += "-----------------------------------------------------------------------------------------\n";
   formattedOutput += "  Quantos?                    Quanto?            P (MW)            Q (MVAr)\n";
   formattedOutput += "  -----------  ---    -----------------------  ---------- ------------------------\n";

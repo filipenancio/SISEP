@@ -56,3 +56,6 @@ class PowerSystemResult(BaseModel):
     genCapacityQmax: Optional[float] = 0.0   # Capacidade total dos geradores - Potência Reativa Máxima (Q_max)
     loadSystemP: Optional[float] = 0.0       # Carga total ativa do sistema (P)
     loadSystemQ: Optional[float] = 0.0       # Carga total reativa do sistema (Q)
+    iterations: Optional[int] = 0            # Número de iterações do algoritmo
+    execution_time_s: Optional[float] = 0.0  # Tempo de execução em segundos
+    algorithm: Optional[str] = 'nr'          # Algoritmo utilizado (nr, fdxb, fdbx, bfsw, gs, dc)

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File, Path
+from fastapi import APIRouter, HTTPException, UploadFile, File, Path, Query
 from typing import List
 from app.models.power_system_results import PowerSystemResult
 from app.services.matpower_service import MatpowerService
@@ -29,6 +29,11 @@ async def simulate_matpower_filename(
         ..., 
         description="Nome do arquivo MATPOWER (ex: case4gs.m, case5.m, case6ww.m, case9.m, case14.m)",
         examples={"default": {"value": "case4gs.m"}}
+    ),
+    algorithm: str = Query(
+        "nr",
+        description="Algoritmo de fluxo de potência (nr, fdxb, fdbx, bfsw, gs, dc)",
+        examples={"default": {"value": "nr"}}
     )
 ):
     """
@@ -36,12 +41,13 @@ async def simulate_matpower_filename(
     
     Args:
         filename (str): Nome do arquivo MATPOWER a ser simulado
+        algorithm (str): Algoritmo a ser utilizado (padrão: nr - Newton-Raphson)
         
     Returns:
         PowerSystemResult: Resultados da simulação do fluxo de potência
     """
     try:
-        return matpower_service.simulate_from_filename(filename)
+        return matpower_service.simulate_from_filename(filename, algorithm)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -49,20 +55,26 @@ async def simulate_matpower_filename(
 
 @router.post("/simulate/matpower/upload", response_model=PowerSystemResult)
 async def simulate_matpower_upload(
-    file: UploadFile = File(..., description="Arquivo MATPOWER (.m)")
+    file: UploadFile = File(..., description="Arquivo MATPOWER (.m)"),
+    algorithm: str = Query(
+        "nr",
+        description="Algoritmo de fluxo de potência (nr, fdxb, fdbx, bfsw, gs, dc)",
+        examples={"default": {"value": "nr"}}
+    )
 ):
     """
     Simula um sistema a partir de um arquivo MATPOWER enviado.
     
     Args:
         file (UploadFile): Arquivo MATPOWER a ser simulado
+        algorithm (str): Algoritmo a ser utilizado (padrão: nr - Newton-Raphson)
         
     Returns:
         PowerSystemResult: Resultados da simulação do fluxo de potência
     """
     try:
         content = await file.read()
-        return matpower_service.simulate_from_string(content.decode())
+        return matpower_service.simulate_from_string(content.decode(), algorithm)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
