@@ -347,38 +347,8 @@ export const EditModalBranch: React.FC<EditModalBranchProps> = ({
         {renderField('Capacidade A', 'rateA', 'MVA')}
         {renderField('Capacidade B', 'rateB', 'MVA')}
         {renderField('Capacidade C', 'rateC', 'MVA')}
-        
-        {/* Campo TAP - somente leitura */}
-        <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
-          <label style={{ 
-            minWidth: '130px', 
-            marginRight: '10px', 
-            fontWeight: 'bold',
-            fontSize: '12px',
-            color: '#000'
-          }}>
-            Tap:
-          </label>
-          <span style={{
-            width: '200px',
-            padding: '6px 8px',
-            backgroundColor: '#f5f5f5',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            fontSize: '12px',
-            color: '#666'
-          }}>
-            {data.angle !== undefined ? data.angle.toFixed(1) : '0.0'}
-          </span>
-          <span style={{ 
-            marginLeft: '8px', 
-            fontSize: '12px', 
-            color: '#666',
-            minWidth: '50px'
-          }}>
-            %
-          </span>
-        </div>
+        {renderField('Tap (ratio)', 'ratio', 'pu', 0.8, 1.2, 0.001)}
+        {renderField('Defasagem (angle)', 'angle', '°', -30, 30, 0.1)}
           </>
         )}
       </div>
