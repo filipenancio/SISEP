@@ -1,6 +1,6 @@
 import React from 'react';
 import { Branch } from './EditModalBranch';
-import { LineResult } from './Diagram3Bus';
+import { LineResult } from './DiagramBase';
 
 interface TooltipBranchProps {
   branch: Branch;

@@ -1,7 +1,7 @@
 import { Bus } from '../components/EditModalBus';
 import { Generator } from '../components/EditModalGenerator';
 import { Branch } from '../components/EditModalBranch';
-import { LineResult } from '../components/Diagram3Bus';
+import { LineResult } from '../components/DiagramBase';
 
 export interface MPC {
   version: string;

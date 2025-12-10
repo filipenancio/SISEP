@@ -1,6 +1,6 @@
 import React from 'react';
 import { EditModalBase } from './EditModalBase';
-import { LineResult } from './Diagram3Bus';
+import { LineResult } from './DiagramBase';
 import { NumericInput } from './NumericInput';
 
 export interface Branch {
